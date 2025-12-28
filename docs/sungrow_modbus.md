@@ -22,6 +22,16 @@ This documentation describes the most important Modbus registers for Sungrow hyb
 | Unit ID | 1 |
 | Timeout | 300ms recommended |
 
+### Modbus Server Configuration in Loxone
+
+![Modbus Server Configuration](images/loxone/modbus_server.png)
+
+```
+Name: Sungrow Inverter
+Address: sungrow-ip:502
+Timeout: 300ms
+```
+
 ---
 
 ## Read Registers (Function Code 4 - Read Input Registers)
@@ -41,6 +51,21 @@ This documentation describes the most important Modbus registers for Sungrow hyb
 | 13022 | Battery SOC | U16 | /10 | % | **Relative** state of charge |
 | 13023 | Battery Health | U16 | /10 | % | State of Health |
 | 13024 | Battery Temp | U16 | /10 | °C | Battery temperature |
+
+### SOC Sensor Configuration Example
+
+![Modbus Sensor SOC](images/loxone/modbus_sensor_soc.png)
+
+```
+Type: Modbus Analog Sensor
+Name: Battery SOC
+Register: 13022 (in Loxone: 13021)
+Function Code: 4 (Read Input)
+Data Type: Unsigned 16-bit
+Polling: 10s
+Source High: 10
+Dest High: 1
+```
 
 ### Energy Counters
 
@@ -86,6 +111,19 @@ This documentation describes the most important Modbus registers for Sungrow hyb
 | 170 | 0xAA | Charge |
 | 187 | 0xBB | Discharge |
 | 204 | 0xCC | Stop |
+
+### EMS Mode Actor Configuration Example
+
+![Modbus Actor EMS Mode](images/loxone/modbus_actor_ems.png)
+
+```
+Type: Modbus Analog Actor
+Name: EMS Mode
+Register: 13050 (in Loxone: 13049)
+Function Code: 6 (Write Single)
+Source High: 10
+Dest High: 10
+```
 
 ### SOC Limits
 
@@ -139,49 +177,6 @@ This documentation describes the most important Modbus registers for Sungrow hyb
 
 ---
 
-## Typical Modbus Configuration in Loxone
-
-### Modbus Server
-
-```
-Name: Sungrow Inverter
-Address: sungrow-ip:502
-Timeout: 300ms
-```
-
-### Modbus Device
-
-```
-Name: SH10RT
-Channel: 1
-```
-
-### Example: SOC Sensor
-
-```
-Type: Modbus Analog Sensor
-Name: Battery SOC
-Register: 13022 (in Loxone: 13021)
-Function Code: 4 (Read Input)
-Data Type: Unsigned 16-bit
-Polling: 10s
-Source High: 10
-Dest High: 1
-```
-
-### Example: EMS Mode Actor
-
-```
-Type: Modbus Analog Actor
-Name: EMS Mode
-Register: 13050 (in Loxone: 13049)
-Function Code: 6 (Write Single)
-Source High: 10
-Dest High: 10
-```
-
----
-
 ## Battery Mode Summary
 
 | Desired Mode | EMS (13050) | Cmd (13051) | Max Disch (33048) | Power (13052) |
@@ -203,3 +198,13 @@ Dest High: 10
 4. **Self-Consumption:** In mode 0, Sungrow controls automatically. PV surplus is charged, load is supplied from battery.
 
 5. **Forced Mode:** Only needed for grid charging. For normal discharge, Self-Consumption is sufficient.
+
+---
+
+## Image Checklist
+
+Please add the following screenshots to `docs/images/loxone/`:
+
+- [ ] `modbus_server.png` - Modbus Server configuration
+- [ ] `modbus_sensor_soc.png` - Modbus Analog Sensor for SOC
+- [ ] `modbus_actor_ems.png` - Modbus Analog Actor for EMS Mode

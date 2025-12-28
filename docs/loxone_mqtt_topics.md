@@ -20,7 +20,11 @@ These values are sent by Loxone to the MQTT broker. They are received by Home As
 | `loxone/battery/power` | Battery power | W | Modbus Register 13021 |
 | `loxone/price/import` | Current electricity price | €/kWh | Tibber |
 
-### Virtual Output Command Configuration
+### Virtual Output Configuration
+
+Example configuration for a Virtual Output Command:
+
+![Virtual Output PV Power](images/loxone/virtual_output_pv.png)
 
 ```
 Command: publish loxone/pv/power <v>
@@ -33,7 +37,7 @@ Scaling: 1:1000 (kW → W)
 
 These values are received by Loxone from the MQTT broker (sent by Node-RED).
 
-### Control
+### Control Topics
 
 | Topic | Type | Values | Description |
 |-------|------|--------|-------------|
@@ -42,7 +46,29 @@ These values are received by Loxone from the MQTT broker (sent by Node-RED).
 | `emhass/battery/soc_target` | Analog | 0-100 | Target SOC in % |
 | `emhass/battery/power_signed` | Analog | -5000 to +5000 | Original P_batt |
 
-### Status (for visualization)
+### Virtual Text Input for Mode
+
+![Virtual Text Input Mode](images/loxone/virtual_input_mode.png)
+
+```
+Name: emhass_battery_mode
+Type: Virtual Text Input
+MQTT Topic: emhass/battery/mode
+```
+
+### Virtual Analog Input for Power
+
+![Virtual Analog Input Power](images/loxone/virtual_input_power.png)
+
+```
+Name: emhass_battery_power
+Type: Virtual Input
+MQTT Topic: emhass/battery/power
+Analog: Yes
+Max: 10000
+```
+
+### Status Topics (for visualization)
 
 | Topic | Example | Description |
 |-------|---------|-------------|
@@ -65,6 +91,21 @@ These values are received by Loxone from the MQTT broker (sent by Node-RED).
 ## Status Blocks for Battery Control
 
 Status blocks translate the EMHASS mode into Modbus registers.
+
+### Battery Mode Status Block
+
+![Status Block Battery Mode](images/loxone/status_block_battery.png)
+
+```
+Name: EMHASS Battery Mode
+Inputs:
+  - I1: emhass_battery_mode
+  - I2: emhass_battery_power
+States:
+  - "charge": I1 == "charge"
+  - "hold": I1 == "hold"  
+  - "discharge": Default
+```
 
 ### EMS_Mode_Controller (→ Register 13050)
 
@@ -99,35 +140,20 @@ Status blocks translate the EMHASS mode into Modbus registers.
 
 ---
 
-## Loxone Config Examples
+## Complete Program Page
 
-### Virtual Input (Text) for Mode
+Overview of the complete EMHASS energy program page in Loxone Config:
 
-```
-Name: emhass_battery_mode
-Type: Virtual Text Input
-MQTT Topic: emhass/battery/mode
-```
+![Loxone Program Page EMHASS](images/loxone/program_page_emhass.png)
 
-### Virtual Input (Analog) for Power
+---
 
-```
-Name: emhass_battery_power
-Type: Virtual Input
-MQTT Topic: emhass/battery/power
-Analog: Yes
-Max: 10000
-```
+## Image Checklist
 
-### Status Block
+Please add the following screenshots to `docs/images/loxone/`:
 
-```
-Name: EMHASS Battery Mode
-Inputs:
-  - I1: emhass_battery_mode
-  - I2: emhass_battery_power
-States:
-  - "charge": I1 == "charge"
-  - "hold": I1 == "hold"  
-  - "discharge": Default
-```
+- [ ] `virtual_input_mode.png` - Virtual Text Input configuration
+- [ ] `virtual_input_power.png` - Virtual Analog Input configuration
+- [ ] `virtual_output_pv.png` - Virtual Output Command configuration
+- [ ] `status_block_battery.png` - Status block for battery mode
+- [ ] `program_page_emhass.png` - Complete program page overview

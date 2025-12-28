@@ -1,5 +1,4 @@
-# EMLOX
-EMHASS Battery Control for Loxone &amp; Sungrow
+# EMHASS Battery Control for Loxone & Sungrow
 
 Dynamic battery optimization with EMHASS, Tibber dynamic pricing, and Solcast PV forecast.
 
@@ -93,6 +92,18 @@ Forced Charge (grid charging) is only activated when EMHASS calculates that the 
 │   (future)          │
 └─────────────────────┘
 ```
+
+---
+
+## Node-RED Flow Overview
+
+The Node-RED flow orchestrates all components:
+
+![Node-RED Flow Overview](docs/images/nodered/flow_overview.png)
+
+Configuration is centralized in one node at the top:
+
+![Node-RED Config Node](docs/images/nodered/config_node.png)
 
 ---
 
@@ -233,6 +244,12 @@ docker run -d \
 
 **Important:** The EMHASS data directory is mounted into Node-RED (`/emhass/data`) so Node-RED can read the CSV results!
 
+### 5. LoxBerry Solcast Plugin
+
+Configure the Solcast plugin with your API key and rooftop IDs:
+
+![LoxBerry Solcast Configuration](docs/images/loxberry/solcast_config.png)
+
 ---
 
 ## Configuration
@@ -307,6 +324,30 @@ const CONFIG = {
 
 ---
 
+## Loxone Configuration
+
+### Program Page Overview
+
+The Loxone program page for EMHASS battery control:
+
+![Loxone Program Page EMHASS](docs/images/loxone/program_page_emhass.png)
+
+For detailed Loxone configuration, see [docs/loxone_mqtt_topics.md](docs/loxone_mqtt_topics.md).
+
+---
+
+## Result
+
+After successful setup, you can see the EMHASS status in the Loxone App:
+
+![Loxone App Status](docs/images/result/loxone_app_status.png)
+
+Debug output in Node-RED after successful optimization:
+
+![Node-RED Debug Output](docs/images/nodered/debug_output.png)
+
+---
+
 ## Roadmap & Future Plans
 
 ### Current Status
@@ -337,9 +378,9 @@ MIT License - see [LICENSE](LICENSE)
 ## Credits
 
 - [EMHASS](https://github.com/davidusb-geek/emhass) by davidusb-geek
-- Loxone Community 
+- Loxone Community
 - LoxBerry Team
-- ChatGPT & ClaudeAI
+- ClaudeAI & ChatGPT (dreamteam!)
 
 ---
 
