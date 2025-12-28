@@ -1,0 +1,84 @@
+# =============================================================================
+# HOME ASSISTANT CONFIGURATION FOR EMHASS
+# =============================================================================
+# 
+# This configuration serves as a bridge between Loxone/MQTT and InfluxDB.
+# EMHASS reads historical data from InfluxDB for load forecasting.
+#
+# Planned: Direct writing via Telegraf (without Home Assistant)
+# =============================================================================
+
+default_config:
+
+# InfluxDB connection - see influxdb.yaml
+influxdb: !include influxdb.yaml
+
+# Recorder - only store required sensors in HA database
+# (InfluxDB stores in parallel for EMHASS)
+recorder:
+  include:
+    entities:
+      - sensor.loxone_house_power_wo_ev
+      - sensor.loxone_house_power
+      - sensor.loxone_pv_power
+      - sensor.loxone_outdoor_temperature
+
+# =============================================================================
+# MQTT SENSORS
+# =============================================================================
+# These sensors receive data from Loxone via MQTT (LoxBerry)
+# and provide them to EMHASS/InfluxDB
+
+mqtt:
+  sensor:
+    # === POWER VALUES ===
+    - name: "loxone_house_power"
+      unique_id: loxone_house_power
+      state_topic: "loxone/house/power"
+      unit_of_measurement: "W"
+      device_class: power
+      state_class: measurement
+
+    - name: "loxone_house_power_wo_ev"
+      unique_id: loxone_house_power_wo_ev
+      state_topic: "loxone/house/power_wo_ev"
+      unit_of_measurement: "W"
+      device_class: power
+      state_class: measurement
+
+    - name: "loxone_battery_power"
+      unique_id: loxone_battery_power
+      state_topic: "loxone/battery/power"
+      unit_of_measurement: "W"
+      device_class: power
+      state_class: measurement
+
+    - name: "loxone_battery_soc"
+      unique_id: loxone_battery_soc
+      state_topic: "loxone/battery/soc"
+      unit_of_measurement: "%"
+      device_class: battery
+      state_class: measurement
+
+    - name: "loxone_grid_power"
+      unique_id: loxone_grid_power
+      state_topic: "loxone/grid/power"
+      unit_of_measurement: "W"
+      device_class: power
+      state_class: measurement
+
+    - name: "loxone_pv_power"
+      unique_id: loxone_pv_power
+      state_topic: "loxone/pv/power"
+      unit_of_measurement: "W"
+      device_class: power
+      state_class: measurement
+
+    # === TEMPERATURES (optional, for heating optimization) ===
+    - name: "loxone_outdoor_temperature"
+      unique_id: loxone_outdoor_temperature
+      state_topic: "loxone/climate/outdoor/temperature"
+      unit_of_measurement: "°C"
+      device_class: temperature
+      state_class: measurement
+      value_template: "{{ value | float }}"

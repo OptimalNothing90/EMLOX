@@ -1,0 +1,47 @@
+# Secrets - NEVER commit these!
+secrets.yaml
+**/secrets.yaml
+*.secret
+.env
+
+# Local configuration with real IPs/tokens
+config/*.local.*
+*.local.json
+*.local.yaml
+
+# Loxone project files (contain personal data)
+*.Loxone
+*.LoxCC
+
+# Node modules
+node_modules/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Python
+__pycache__/
+*.py[cod]
+.Python
+venv/
+.venv/
+
+# Docker
+docker-compose.override.yml

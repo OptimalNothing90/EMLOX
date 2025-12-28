@@ -1,0 +1,34 @@
+# =============================================================================
+# INFLUXDB 2.x CONNECTION FOR HOME ASSISTANT
+# =============================================================================
+#
+# Writes sensor data to InfluxDB for:
+# - EMHASS load forecasting (historical data)
+# - Future ML training
+# - Grafana dashboards
+#
+# IMPORTANT: Adapt token and host!
+# =============================================================================
+
+api_version: 2
+ssl: false
+host: <INFLUXDB_IP>
+port: 8086
+token: "<INFLUXDB_TOKEN>"
+organization: "home"
+bucket: "smarthome"
+
+# Only write relevant sensors to InfluxDB
+# (reduces data volume and improves performance)
+include:
+  entities:
+    # Power values for EMHASS
+    - sensor.loxone_house_power
+    - sensor.loxone_house_power_wo_ev
+    - sensor.loxone_battery_power
+    - sensor.loxone_battery_soc
+    - sensor.loxone_grid_power
+    - sensor.loxone_pv_power
+    
+    # Temperatures (optional, for heating optimization)
+    - sensor.loxone_outdoor_temperature
